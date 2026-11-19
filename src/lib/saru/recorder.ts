@@ -38,7 +38,7 @@ export async function startRecording(opts: {
   noSpeechMs?: number;
   onSpeech?: () => void;
 } = {}): Promise<RecorderHandle> {
-  const { maxMs = 30_000, silenceMs = 1200, noSpeechMs = 9000, onSpeech } = opts;
+  const { maxMs = 30_000, silenceMs = 800, noSpeechMs = 9000, onSpeech } = opts;
   if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined")
     throw new MicError("This browser can't record audio. Please use text chat.", "unsupported");
 
