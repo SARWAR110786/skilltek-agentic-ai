@@ -15,7 +15,14 @@ Browser widget ──► /api/saru/chat   ─┐  (Next.js server: validates inp
                       services, verification, contact)
             Voice: OpenAI text-to-speech (gpt-4o-mini-tts) → mp3 back to the browser
 ```
-Voice is a turn-based pipeline (speech-to-text → agent → text-to-speech), not a streaming real-time voice agent.
+**Voice has two modes:**
+- **Live call (default, streaming):** the browser connects over WebRTC to OpenAI Realtime (`gpt-realtime`,
+  speech-in → speech-out, ~1 s replies, callers can interrupt). n8n workflow **"Saru Assistant - Realtime Voice Session"**
+  loads the Saru Knowledge Base and issues a short-lived (10 min) client secret; the OpenAI key never leaves n8n.
+  Change model/voice in that workflow's "Build Voice Session" node (`MODEL`, `VOICE`). Live-call transcripts are added
+  to the on-page chat history but are not stored in n8n memory.
+- **Standard voice (fallback):** turn-based speech-to-text → Saru agent → text-to-speech through the main workflow,
+  used automatically if live voice can't start on a device.
 Languages: English, Urdu and Sindhi in text. Speech recognition handles all three; spoken Sindhi output quality depends on OpenAI TTS and may sound accented.
 
 ## Environment variables (server-only, never NEXT_PUBLIC_)
@@ -23,6 +30,7 @@ Languages: English, Urdu and Sindhi in text. Speech recognition handles all thre
 |---|---|
 | `N8N_TEXT_CHAT_WEBHOOK` | `https://hahoiu.app.n8n.cloud/webhook/saru-chat` |
 | `N8N_VOICE_WEBHOOK` | `https://hahoiu.app.n8n.cloud/webhook/saru-voice` |
+| `N8N_REALTIME_WEBHOOK` | `https://hahoiu.app.n8n.cloud/webhook/saru-realtime` |
 | `SARU_N8N_SECRET` | same value as in the n8n webhooks' "Only run if" option (already in `.env.local`) |
 
 On Vercel: Project → Settings → Environment Variables → add all three → redeploy.

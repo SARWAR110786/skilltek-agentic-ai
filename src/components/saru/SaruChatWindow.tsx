@@ -294,6 +294,9 @@ export default function SaruChatWindow({
           autoStart={voiceAuto}
           language={state?.language ?? "auto"}
           onLanguage={setLanguage}
+          onLiveMessage={(role, text) =>
+            addMessage({ id: newId("m"), role, text, at: Date.now(), via: "voice" })
+          }
           getIds={ids}
           onTurn={onVoiceTurn}
           onClose={() => {
