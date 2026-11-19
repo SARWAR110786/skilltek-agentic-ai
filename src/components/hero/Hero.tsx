@@ -156,7 +156,7 @@ export default function Hero() {
           className="relative z-10 mx-auto flex h-full max-w-[1400px] items-end px-4 pb-[max(4.5rem,9vh)] pt-28 sm:px-8 lg:items-stretch lg:pb-10"
         >
           <div className="max-w-[640px] lg:my-auto">
-            <p data-hero-fade className="glass mb-7 inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12.5px] text-ink/85">
+            <p data-hero-fade className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0b0a18]/85 px-4 py-2 text-[12.5px] text-ink/85 backdrop-blur-md">
               <Sparkles size={14} className="text-cyan" aria-hidden />
               {SITE.duration} professional program · No-code &amp; Low-code
             </p>

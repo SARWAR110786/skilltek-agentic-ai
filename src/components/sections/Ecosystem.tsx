@@ -25,7 +25,7 @@ function N8nFeature() {
           <span className="rounded-full border border-[#EA4B71]/40 bg-[#EA4B71]/10 px-3 py-1 font-mono text-[10.5px] uppercase tracking-[0.25em] text-[#ff8fab]">
             Primary platform
           </span>
-          <span className="font-mono text-[11px] text-muted">core of the program</span>
+          <span className="hidden font-mono text-[11px] text-muted sm:inline">core of the program</span>
         </div>
 
         {/* 3D orbit around the n8n mark */}

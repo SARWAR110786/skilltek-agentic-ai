@@ -93,7 +93,7 @@ export default function Curriculum() {
         />
 
         {/* compact progress bar for small screens */}
-        <div className="glass-strong sticky top-[80px] z-20 mt-12 rounded-2xl px-4 py-3 lg:hidden" aria-hidden>
+        <div className="sticky top-[78px] z-20 mt-12 rounded-2xl border border-white/10 bg-[#0d0b1e] px-4 py-3 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.9)] lg:hidden" aria-hidden>
           <div className="flex items-center justify-between gap-3 text-[13px]">
             <span className="truncate">
               <span className="font-mono text-cyan">{pad(active + 1)}</span>

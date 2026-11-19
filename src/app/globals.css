@@ -24,7 +24,9 @@
 html {
   background: var(--color-bg);
   scroll-behavior: auto;
+  overflow-x: clip; /* decorative glows must never widen the page on phones */
 }
+main > section, footer { overflow-x: clip; }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
