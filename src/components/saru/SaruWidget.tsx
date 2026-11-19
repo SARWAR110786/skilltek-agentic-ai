@@ -1,17 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { Phone } from "lucide-react";
+import { unlockAudio } from "@/lib/saru/recorder";
 import { useSaruSession } from "./SaruSessionManager";
 import SaruAvatar from "./SaruAvatar";
 import SaruChatWindow from "./SaruChatWindow";
 
 /**
- * SaruWidget — floating "Ask Saru" launcher, fixed bottom-right on every page
- * (mounted in the root layout). Opens the chat window; state persists.
+ * SaruWidget — fixed bottom-right on every page (mounted in the root layout):
+ *  • "Call Saru" — one tap opens a voice call and starts listening immediately
+ *  • the round avatar button opens text chat
  */
 export default function SaruWidget() {
   const session = useSaruSession();
   const [open, setOpen] = useState(false);
+  const [voiceRequest, setVoiceRequest] = useState(0);
   const unseen = session.state ? !session.state.seen : false;
 
   const toggle = () => {
@@ -19,19 +23,39 @@ export default function SaruWidget() {
     session.markSeen();
   };
 
+  const call = () => {
+    unlockAudio(); // must run inside the tap so phones allow Saru's voice
+    session.markSeen();
+    setOpen(true);
+    setVoiceRequest((n) => n + 1);
+  };
+
   return (
     <>
-      {session.state && <SaruChatWindow open={open} onMinimize={() => setOpen(false)} onClose={() => setOpen(false)} session={session} />}
+      {session.state && (
+        <SaruChatWindow
+          open={open}
+          onMinimize={() => setOpen(false)}
+          onClose={() => setOpen(false)}
+          session={session}
+          voiceRequest={voiceRequest}
+        />
+      )}
       <div className="saru-launcher fixed z-[91] flex items-center gap-2.5">
         {!open && (
           <button
             type="button"
-            onClick={toggle}
-            className="saru-label glass-strong hidden rounded-full px-3.5 py-2 text-[13px] font-medium text-ink shadow-lg sm:block"
-            tabIndex={-1}
-            aria-hidden
+            onClick={call}
+            className="saru-call group flex h-12 items-center gap-2 rounded-full pl-1.5 pr-4 text-[14px] font-semibold text-white"
+            aria-label="Call Saru: start a voice conversation"
           >
-            Ask Saru
+            <span className="grid h-9 w-9 place-items-center rounded-full bg-white/20">
+              <Phone size={17} aria-hidden className="transition-transform group-hover:rotate-12" />
+            </span>
+            <span>
+              Call Saru
+              <span className="block text-[10.5px] font-medium leading-none text-white/75">EN · اردو · سنڌي</span>
+            </span>
           </button>
         )}
         <button

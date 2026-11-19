@@ -28,7 +28,10 @@ export default function SaruChatWindow({
   onMinimize,
   onClose,
   session,
+  voiceRequest = 0,
 }: {
+  /** increments when the page's "Call Saru" button is pressed */
+  voiceRequest?: number;
   open: boolean;
   onMinimize: () => void;
   onClose: () => void;
@@ -38,6 +41,15 @@ export default function SaruChatWindow({
   const [busy, setBusy] = useState(false);
   const [dictating, setDictating] = useState(false);
   const [voice, setVoice] = useState(false);
+  const [voiceAuto, setVoiceAuto] = useState(false);
+
+  // one-tap call: open straight into voice mode and start listening
+  useEffect(() => {
+    if (voiceRequest > 0) {
+      setVoiceAuto(true);
+      setVoice(true);
+    }
+  }, [voiceRequest]);
   const [suggestions, setSuggestions] = useState<string[]>(DEFAULT_SUGGESTIONS);
   const [confirmClear, setConfirmClear] = useState(false);
   const [notice, setNotice] = useState("");
@@ -264,7 +276,10 @@ export default function SaruChatWindow({
         <SaruInput
           onSend={(t) => send(t)}
           onDictate={dictate}
-          onVoiceMode={() => setVoice(true)}
+          onVoiceMode={() => {
+            setVoiceAuto(true);
+            setVoice(true);
+          }}
           busy={busy}
           dictating={dictating}
         />
@@ -275,9 +290,16 @@ export default function SaruChatWindow({
 
       {voice && (
         <SaruVoiceMode
+          key={voiceRequest}
+          autoStart={voiceAuto}
+          language={state?.language ?? "auto"}
+          onLanguage={setLanguage}
           getIds={ids}
           onTurn={onVoiceTurn}
-          onClose={() => setVoice(false)}
+          onClose={() => {
+            setVoice(false);
+            setVoiceAuto(false);
+          }}
           onSwitchToText={(n) => {
             setVoice(false);
             if (n) setNotice(n);

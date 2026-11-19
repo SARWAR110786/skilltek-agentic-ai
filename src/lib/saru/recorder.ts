@@ -38,7 +38,7 @@ export async function startRecording(opts: {
   noSpeechMs?: number;
   onSpeech?: () => void;
 } = {}): Promise<RecorderHandle> {
-  const { maxMs = 30_000, silenceMs = 1300, noSpeechMs = 8000, onSpeech } = opts;
+  const { maxMs = 30_000, silenceMs = 1200, noSpeechMs = 9000, onSpeech } = opts;
   if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined")
     throw new MicError("This browser can't record audio. Please use text chat.", "unsupported");
 
@@ -93,18 +93,36 @@ export async function startRecording(opts: {
     stop();
   };
 
-  // voice-activity detection loop
+  // voice-activity detection: learn the room's noise floor for ~350 ms,
+  // then count as speech only what is clearly louder than that floor.
   const buf = new Float32Array(analyser.fftSize);
+  let floor = 0;
+  let floorSamples = 0;
+  let loudMs = 0;
+  let lastTick = started;
   const tick = () => {
     analyser.getFloatTimeDomainData(buf);
     let sum = 0;
     for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
     const rms = Math.sqrt(sum / buf.length);
     const now = performance.now();
-    if (rms > 0.02) {
-      if (!spoke) onSpeech?.();
-      spoke = true;
-      lastLoud = now;
+    const dt = now - lastTick;
+    lastTick = now;
+    if (now - started < 350) {
+      floor = (floor * floorSamples + rms) / (floorSamples + 1);
+      floorSamples++;
+    } else {
+      const threshold = Math.min(0.06, Math.max(0.012, floor * 3));
+      if (rms > threshold) {
+        loudMs += dt;
+        if (loudMs > 120) {
+          if (!spoke) onSpeech?.();
+          spoke = true;
+        }
+        lastLoud = now;
+      } else if (!spoke) {
+        loudMs = Math.max(0, loudMs - dt / 2);
+      }
     }
     if (now - started > maxMs) return stop();
     if (spoke && now - lastLoud > silenceMs) return stop();
@@ -117,27 +135,58 @@ export async function startRecording(opts: {
   return { analyser, result, stop, cancel };
 }
 
-/** Plays base64 audio and exposes an analyser for the visualizer. */
-export function playAudio(base64: string, mimeType: string) {
+/**
+ * Call inside a click/tap handler: resumes the shared AudioContext and plays a
+ * silent sample so mobile browsers (iOS Safari) allow Saru's voice to play later.
+ */
+export function unlockAudio() {
+  try {
+    const ctx = audioContext();
+    const b = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = b;
+    src.connect(ctx.destination);
+    src.start(0);
+  } catch {
+    /* audio not available — voice replies will show as text */
+  }
+}
+
+/** Plays base64 audio through the AudioContext and exposes an analyser for the visualizer. */
+export function playAudio(base64: string) {
   const ctx = audioContext();
-  const el = new Audio(`data:${mimeType};base64,${base64}`);
-  const src = ctx.createMediaElementSource(el);
   const analyser = ctx.createAnalyser();
   analyser.fftSize = 1024;
-  src.connect(analyser);
   analyser.connect(ctx.destination);
-  const ended = new Promise<void>((resolve) => {
-    el.onended = () => resolve();
-    el.onerror = () => resolve();
-  });
-  const started = el.play().catch(() => undefined);
+  let src: AudioBufferSourceNode | null = null;
+  let stopped = false;
+  let resolveEnded: () => void = () => {};
+  const ended = new Promise<void>((r) => (resolveEnded = r));
+  (async () => {
+    try {
+      const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+      const buffer = await ctx.decodeAudioData(bytes.buffer);
+      if (stopped) return resolveEnded();
+      src = ctx.createBufferSource();
+      src.buffer = buffer;
+      src.connect(analyser);
+      src.onended = () => resolveEnded();
+      src.start();
+    } catch {
+      resolveEnded();
+    }
+  })();
   return {
     analyser,
     ended,
-    started,
     stop: () => {
-      el.pause();
-      el.src = "";
+      stopped = true;
+      try {
+        src?.stop();
+      } catch {
+        /* already stopped */
+      }
+      resolveEnded();
     },
   };
 }

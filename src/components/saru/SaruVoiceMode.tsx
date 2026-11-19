@@ -8,6 +8,13 @@ import { MicError, playAudio, startRecording, type RecorderHandle } from "@/lib/
 import SaruAvatar from "./SaruAvatar";
 import SaruVoiceVisualizer from "./SaruVoiceVisualizer";
 
+const LANGS: { v: SaruLanguage; label: string }[] = [
+  { v: "auto", label: "Auto" },
+  { v: "en", label: "English" },
+  { v: "ur", label: "اردو" },
+  { v: "sd", label: "سنڌي" },
+];
+
 type Phase = "idle" | "listening" | "thinking" | "speaking";
 type Line = { who: "you" | "saru"; text: string };
 
@@ -29,7 +36,13 @@ export default function SaruVoiceMode({
   onTurn,
   onClose,
   onSwitchToText,
+  autoStart = false,
+  language,
+  onLanguage,
 }: {
+  autoStart?: boolean;
+  language: SaruLanguage;
+  onLanguage: (l: SaruLanguage) => void;
   getIds: () => { sessionId: string; conversationId: string; language: SaruLanguage };
   onTurn: (userText: string, reply: SaruReply) => void;
   onClose: () => void;
@@ -104,7 +117,7 @@ export default function SaruVoiceMode({
 
     if (reply.audio) {
       setPhase("speaking");
-      const p = playAudio(reply.audio.base64, reply.audio.mimeType);
+      const p = playAudio(reply.audio.base64);
       player.current = p;
       setAnalyser(p.analyser);
       await p.ended;
@@ -118,6 +131,14 @@ export default function SaruVoiceMode({
     if (!mutedRef.current) void listen();
     else setPhase("idle");
   }, [getIds, onTurn]);
+
+  const started = useRef(false);
+  useEffect(() => {
+    if (autoStart && !started.current) {
+      started.current = true;
+      void listen();
+    }
+  }, [autoStart, listen]);
 
   const micPress = () => {
     if (phase === "listening") return rec.current?.stop();
@@ -188,7 +209,24 @@ export default function SaruVoiceMode({
         {fatal || hint || (phase === "listening" ? "Pause when you're done and Saru will answer." : "")}
       </p>
 
-      <ol className="mx-4 mt-1 flex-1 space-y-2 overflow-y-auto overscroll-contain pb-2" aria-label="Voice transcript">
+      <div className="mx-auto mt-1 flex gap-1.5" role="radiogroup" aria-label="Conversation language">
+        {LANGS.map((l) => (
+          <button
+            key={l.v}
+            type="button"
+            role="radio"
+            aria-checked={language === l.v}
+            onClick={() => onLanguage(l.v)}
+            className={`rounded-full border px-3 py-1 text-[12.5px] transition-colors ${
+              language === l.v ? "border-cyan/60 bg-cyan/15 text-white" : "border-white/10 text-muted hover:text-white"
+            }`}
+          >
+            {l.label}
+          </button>
+        ))}
+      </div>
+
+      <ol className="mx-4 mt-2 flex-1 space-y-2 overflow-y-auto overscroll-contain pb-2" aria-label="Voice transcript">
         {lines.map((l, i) => (
           <li key={i} dir="auto" className={`text-[13px] leading-relaxed ${l.who === "you" ? "text-ink/70" : "text-ink"}`}>
             <span className={`mr-1.5 font-mono text-[10px] uppercase tracking-widest ${l.who === "you" ? "text-muted" : "text-cyan"}`}>
