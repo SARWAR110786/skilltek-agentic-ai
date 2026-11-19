@@ -166,7 +166,7 @@ export default function SaruVoiceMode({
   const avatarState = phase === "thinking" ? "thinking" : phase === "speaking" ? "speaking" : phase === "listening" ? "listening" : "idle";
 
   return (
-    <div className="saru-voice absolute inset-0 z-10 flex flex-col bg-[#080814]/97" role="dialog" aria-label="Voice conversation with Saru">
+    <div className="saru-voice absolute inset-0 z-10 flex flex-col bg-[#080814]" role="dialog" aria-label="Voice conversation with Saru">
       <div className="flex items-center justify-between px-4 pt-4">
         <div className="flex items-center gap-2">
           <SaruAvatar size={28} state={avatarState} />
