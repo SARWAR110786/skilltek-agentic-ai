@@ -23,6 +23,6 @@ npm run build                # static site in ./out — upload anywhere
 - `src/components/sections/` – About, Ecosystem, Curriculum, Projects, Program, Apply, Footer
 - `public/brand/` – Skilltek logo
 
-## Apply form
-Set `NEXT_PUBLIC_APPLY_WEBHOOK_URL` to an n8n Webhook (or any JSON endpoint). Without it, the form
-falls back to an email to `NEXT_PUBLIC_CONTACT_EMAIL`. With neither set, the form shows a notice.
+## Apply buttons
+There is no application form on this site. Every "Apply" button opens the official SkillTek
+admissions page: https://skilltek-one.vercel.app/admissions (set in `SITE.applyUrl`, `src/lib/content.ts`).

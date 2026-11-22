@@ -43,7 +43,7 @@ export default function Footer() {
             <li>Duration: {SITE.duration}</li>
             <li>14 modules · 6 portfolio projects</li>
             <li>
-              <a href="#contact" className="text-cyan hover:underline">Apply now →</a>
+              <a href={SITE.applyUrl} className="text-cyan hover:underline">Apply now →</a>
             </li>
           </ul>
         </div>

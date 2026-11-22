@@ -1,21 +1,18 @@
 import type { BrandKey } from "./brands";
 
-/* ───────────────────────── Site configuration ─────────────────────────
- * Edit these values to wire the site to your real admissions channels.
- * applyWebhook: any URL that accepts a JSON POST (an n8n Webhook node is ideal).
- * If no webhook is set, the form falls back to opening an email to `email`.
- */
+/* ───────────────────────── Site configuration ───────────────────────── */
 export const SITE = {
   name: "The Skilltek Institute & Media Solution",
   short: "Skilltek",
   program: "No-Code & Low-Code Agentic AI & Automation",
   duration: "2 Months",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://skilltek.example",
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "",
-  phone: process.env.NEXT_PUBLIC_CONTACT_PHONE ?? "",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "", // digits only, e.g. 923001234567
-  // n8n workflow "Skilltek - Course Applications" → data table "Skilltek Applications"
-  applyWebhook: process.env.NEXT_PUBLIC_APPLY_WEBHOOK_URL ?? "https://hahoiu.app.n8n.cloud/webhook/skilltek-apply",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://skilltek-agentic-ai.vercel.app",
+  /** Every "Apply" button sends students to the official SkillTek admissions page. */
+  applyUrl: "https://skilltek-one.vercel.app/admissions",
+  address: "Near Dargah Shah Mubeen, Beside Dr Luchman Clinic, Doctor Street, Thatta",
+  phone: "0312 2098894",
+  phoneIntl: "+923122098894",
+  email: "theskilltek@gmail.com",
 };
 
 export const NAV = [

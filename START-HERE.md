@@ -6,12 +6,11 @@
 ## What's inside
 | Path | What it is |
 |---|---|
-| `src/` | The website (Next.js): hero, sections, apply form, Saru assistant (`src/components/saru`, `src/lib/saru`, `src/app/api/saru`) |
+| `src/` | The website (Next.js): hero, sections, Apply buttons (to the SkillTek admissions page), Saru assistant (`src/components/saru`, `src/lib/saru`, `src/app/api/saru`) |
 | `src/lib/content.ts` | All website text: modules, tools, projects, FAQ |
 | `public/brand/` | Skilltek logo |
 | `SARU_SETUP.md` | How Saru works (chat, standard voice, live streaming voice), settings, privacy |
 | `n8n-workflows/` | n8n workflows overview, credentials, Google Sheet, Saru's knowledge base (`saru-knowledge-base.csv`) |
-| `google-sheet/apps-script.gs` | Optional alternative way to save applications to a Google Sheet without n8n |
 | `.env.example` | The settings the website needs (no secret values) |
 
 ## Run it on a computer

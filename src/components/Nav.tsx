@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
-import { NAV } from "@/lib/content";
+import { NAV, SITE } from "@/lib/content";
 import { scrollToId, scrollState } from "@/lib/scroll";
 
 type Id = (typeof NAV)[number]["id"];
@@ -111,7 +111,7 @@ export default function Nav() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <a href="#contact" onClick={go("contact")} className="btn btn-primary btn-sm hidden sm:inline-flex">
+            <a href={SITE.applyUrl} className="btn btn-primary btn-sm hidden sm:inline-flex">
               Apply Now <ArrowUpRight size={16} aria-hidden />
             </a>
             <button
@@ -178,8 +178,7 @@ export default function Nav() {
             ))}
           </ul>
           <a
-            href="#contact"
-            onClick={go("contact")}
+            href={SITE.applyUrl}
             tabIndex={open ? 0 : -1}
             className="btn btn-primary mt-auto w-full"
           >

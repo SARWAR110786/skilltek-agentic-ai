@@ -172,8 +172,7 @@ export default function Hero() {
 
             <div data-hero-fade className="mt-8 flex flex-wrap gap-3">
               <a
-                href="#contact"
-                onClick={(e) => (e.preventDefault(), scrollToId("contact"))}
+                href={SITE.applyUrl}
                 className="btn btn-primary"
               >
                 Apply Now <ArrowRight size={18} aria-hidden />
