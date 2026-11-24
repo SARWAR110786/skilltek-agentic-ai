@@ -8,7 +8,7 @@ const sora = Sora({ variable: "--font-sora", subsets: ["latin"], display: "swap"
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 const mono = JetBrains_Mono({ variable: "--font-jbmono", subsets: ["latin"], display: "swap" });
 
-const title = "Agentic AI & Automation Course | The Skilltek Institute & Media Solution";
+const title = "Agentic AI & Automation Course in Thatta | The Skilltek Institute & Media Solutions";
 const description =
   "A 2-month, hands-on program in no-code & low-code Agentic AI. Build AI agents, WhatsApp automation, RAG assistants, MCP integrations and multi-agent systems with n8n, OpenAI, Gemini and Claude.";
 
@@ -25,8 +25,23 @@ export const metadata: Metadata = {
     description,
     type: "website",
     siteName: SITE.name,
+    url: SITE.url,
+    locale: "en_PK",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Agentic AI & Automation — 2-month hands-on course at Skilltek, Thatta",
+      },
+    ],
   },
-  twitter: { card: "summary_large_image", title: "Build the Future with AI — Skilltek", description },
+  twitter: {
+    card: "summary_large_image",
+    title: "Build the Future with AI — Skilltek",
+    description,
+    images: ["/og-image.jpg"],
+  },
   alternates: { canonical: "/" },
 };
 
@@ -42,8 +57,23 @@ const jsonLd = {
   description,
   timeRequired: "P2M",
   educationalLevel: "Beginner to Intermediate",
-  provider: { "@type": "EducationalOrganization", name: SITE.name, sameAs: SITE.url },
-  hasCourseInstance: { "@type": "CourseInstance", courseMode: "Blended", courseWorkload: "P2M" },
+  url: SITE.url,
+  provider: {
+    "@type": "EducationalOrganization",
+    name: SITE.name,
+    url: "https://theskilltek.com",
+    sameAs: ["https://www.facebook.com/TheSkillTek", "https://www.instagram.com/theskilltek/"],
+  },
+  hasCourseInstance: {
+    "@type": "CourseInstance",
+    courseMode: "Blended",
+    courseWorkload: "P2M",
+    location: {
+      "@type": "Place",
+      name: SITE.name,
+      address: { "@type": "PostalAddress", streetAddress: SITE.address, addressLocality: "Thatta", addressCountry: "PK" },
+    },
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
