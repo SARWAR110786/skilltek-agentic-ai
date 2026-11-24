@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "echo 'redirect-only project: nothing to install'",
+  "buildCommand": "mkdir -p vercel-redirect && echo 'Moved to https://theskilltek.com' > vercel-redirect/index.html",
+  "outputDirectory": "vercel-redirect",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "destination": "https://agenticai.theskilltek.com/:path*",
+      "permanent": true
+    }
+  ]
+}
