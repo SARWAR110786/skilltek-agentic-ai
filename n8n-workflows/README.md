@@ -8,7 +8,7 @@ Everything the website talks to lives in your n8n Cloud instance: https://hahoiu
 |---|---|---|
 | **Saru Assistant - SkillTek AI Chat & Voice** | Text chat + standard voice: speech-to-text → Saru agent (gpt-4.1-mini, Postgres memory, knowledge base in the prompt) → text-to-speech | `/webhook/saru-chat`, `/webhook/saru-voice` |
 | **Saru Assistant - Realtime Voice Session** | Live streaming calls: loads the knowledge base and creates a 10-minute OpenAI Realtime session (`gpt-realtime`, voice `marin`) | `/webhook/saru-realtime` |
-| **Skilltek - Course Applications** | **Switched off (unpublished).** The website no longer has an apply form; students apply on https://skilltek-one.vercel.app/admissions | — |
+| **Skilltek - Course Applications** | **Switched off (unpublished).** The website no longer has an apply form; students apply on https://theskilltek.com/admissions | — |
 
 The three Saru webhooks only run when the request carries the secret header `x-saru-key`
 (value = `SARU_N8N_SECRET` in Vercel; it is also visible in each webhook node's *Options → Only run if*).

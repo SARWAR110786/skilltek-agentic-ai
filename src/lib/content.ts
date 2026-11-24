@@ -6,9 +6,9 @@ export const SITE = {
   short: "Skilltek",
   program: "No-Code & Low-Code Agentic AI & Automation",
   duration: "2 Months",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://skilltek-agentic-ai.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://agenticai.theskilltek.com",
   /** Every "Apply" button sends students to the official SkillTek admissions page. */
-  applyUrl: "https://skilltek-one.vercel.app/admissions",
+  applyUrl: "https://theskilltek.com/admissions",
   address: "Near Dargah Shah Mubeen, Beside Dr Luchman Clinic, Doctor Street, Thatta",
   phone: "0312 2098894",
   phoneIntl: "+923122098894",

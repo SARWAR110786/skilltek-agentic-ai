@@ -25,4 +25,4 @@ npm run build                # static site in ./out — upload anywhere
 
 ## Apply buttons
 There is no application form on this site. Every "Apply" button opens the official SkillTek
-admissions page: https://skilltek-one.vercel.app/admissions (set in `SITE.applyUrl`, `src/lib/content.ts`).
+admissions page: https://theskilltek.com/admissions (set in `SITE.applyUrl`, `src/lib/content.ts`).

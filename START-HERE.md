@@ -1,6 +1,6 @@
 # SkillTek Agentic AI website: start here
 
-**Live site:** https://skilltek-agentic-ai.vercel.app
+**Live site:** https://agenticai.theskilltek.com
 **GitHub:** https://github.com/SARWAR110786/skilltek-agentic-ai (every push to `main` auto-deploys on Vercel)
 
 ## What's inside
